@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root {
+            --green: #37c4b1;
+            --cyan: #25aad8;
+            --blue: #4092e3;
+            --purple: #7d54c1;
+            --pink: #c776a3;
+            --orange: #ee8877;
+            --deep-purple: #281c4c;
+            --duration: 0.7s;
+            --ease: cubic-bezier(0.6, 0, 0.2, 1);
+            --transition: transform var(--duration) var(--ease);
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(-45deg, rgb(100 100 100), rgb(50 200 50) , rgb(50 100 200), rgb(200 50 50));
+    animation: gradient 15s ease infinite;
+    background-size: 400% 400%; 
+    font-family: montserrat, arial;
+      
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          
+            overflow: hidden;
+        }
+
+        .goo-filter {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        #app {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            height: 90vmin;
+            width: 55vmin;
+        }
+
+        #app>section {
+            margin: 5vmin 8vmin;
+            grid-area: 1/1;
+        }
+
+        section {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            transform-style: preserve-3d;
+            perspective: 800px;
+            will-change: transform;
+        }
+
+        section>* {
+            flex: 0 0 100%;
+            grid-area: 1/1;
+        }
+
+        .backgrounds {
+            filter: url("#goo");
+            pointer-events: none;
+        }
+
+        .background {
+            will-change: transform;
+            border-radius: 2vmin;
+            background-image: linear-gradient(to bottom, var(--primary, blue), var(--secondary, pink));
+        }
+
+        .background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            z-index: 3;
+            background-image: linear-gradient(to bottom, #4b3777, #331847);
+            opacity: 0.8;
+            transition: inherit;
+            transition-property: opacity;
+        }
+
+        .background[data-active]::before {
+            opacity: 0.01;
+        }
+
+        article {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .background,
+        article {
+            will-change: transform;
+            transition: var(--transition);
+            transition-property: transform, transform-origin, z-index;
+            padding: 5vmin;
+            color: white;
+            transform-origin: right center;
+            transform: translateX(-90%) translateZ(-25vmin) rotateY(40deg);
+        }
+
+        .background[data-active],
+        article[data-active] {
+            transform-origin: center center;
+            transform: translateX(0) translateZ(0) rotateY(0deg);
+            z-index: 3;
+        }
+
+        .background[data-active]~*,
+        article[data-active]~* {
+            z-index: -1;
+            transform-origin: left center;
+            transform: translateX(140%) translateZ(-25vmin) rotateY(-40deg);
+        }
+
+        .background[data-active]+*,
+        article[data-active]+* {
+            z-index: 1;
+            transform: translateX(90%) translateZ(-25vmin) rotateY(-40deg);
+        }
+
+        article {
+            opacity: 0;
+            transition-property: transform, transform-origin, opacity, z-index;
+        }
+
+        article[data-active] {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 4vmin;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 2.5vmin;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+   
+        
+        
+            </style>
+</head>
+
+<body>
+    
+    <a href="https://youtu.be/zf7nnM0XjkU" target="_blank" data-keyframers-credit style="color: #FFF"></a>
+    <script src="https://codepen.io/shshaw/pen/QmZYMG.js"></script>
+
+    <svg class="goo-filter" viewBox="0 0 1 1">
+        <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 50 -20"
+                result="goo" />
+            <!--     <feBlend in="SourceGraphic" in2="goo" /> -->
+        </filter>
+    </svg>
+
+    <main id="app">
+
+        <section class="backgrounds">
+            <div class="background" style="--primary: var(--pink); --secondary: var(--orange)">
+            </div>
+            <div class="background" data-active="true" style="--primary: var(--purple); --secondary: var(--pink)">
+            </div>
+            <div class="background" style="--primary: var(--green); --secondary: var(--cyan)">
+            </div>
+            <div class="background" style="--primary: var(--blue); --secondary: var(--purple)">
+            </div>
+        </section>
+
+        <section class="content">
+            <article>
+                <header>
+                    <h1> IoT payments</h1>
+                </header>
+                <p>IoT payments refer to payments made by a device, without human intervention, based on a set of rules.
+
+                    IoT payments platforms allow customers to pay their invoices through a variety of devices not
+                    limited to contactless cards, smartphones, and smartwatches. Enabling IoT payments in your accounts
+                    receivable process can help elevate customer experiences and make the payment process smoother.</p>
+            </article>
+            <article data-active="true">
+                <header>
+                    <h1>Customer service</h1>
+                </header>
+                <p>IoT devices help provide prompt customer assistance to customers. For example, smartphones (an IoT
+                    device) can notify account managers or customer relationship managers when a customer walks into
+                    your office. This helps you address customers’ concerns quickly and gain their trust and loyalty.
+                    IoT devices can also help customers navigate your office premises by providing them the directions
+                    to the right executive. IoT technology also supports identity management and electronic ticketing
+                    for query resolution.
+                </p>
+            </article>
+            <article data-id="3">
+                <header>
+                    <h1>Auditing</h1>
+                </header>
+                <p>Auditing is crucial to identify any irregularities in the finance processes or to uncover fraud.
+                    Traditional auditing methods involve a ton of paperwork.
+
+                    With the help of IoT, all the transactions can be tracked in real-time and sent to the accounting
+                    department. Using IoT, the accountants can easily track the audit trails of all the employees or
+                    business units, whether they make a purchase or receive money in real-time. This streamlines the
+                    accounting process and lowers the efforts that are otherwise needed for the auditing process. This
+                    also ensures that the accounting procedure is efficient and error-free.</p>
+            </article>
+            <article data-id="4">
+                <header>
+                    <h1>Fraud detectiony</h1>
+                </header>
+                <p>Banks and financial institutions are prime targets of hackers. IoT devices coupled with machine
+                    learning (ML) applications help detect anomalies by collecting data from various machines and web
+                    applications including payment portals, servers, teller machines, etc. This helps quickly identify
+                    instances of fraud and money laundering and take necessary corrective actions.</p>
+            </article>
+        </section>
+    </main>
+
+
+    <script>
+
+
+        console.clear();
+
+        const elApp = document.querySelector("#app");
+        const elBackgrounds = Array.from(document.querySelectorAll(".background"));
+        const elArticles = Array.from(document.querySelectorAll(".content article"));
+
+        elArticles.forEach(article => {
+            article.addEventListener("click", e => {
+                const index = elArticles.indexOf(article);
+                const bg = elBackgrounds[index];
+
+                // Remove all data-active
+                elApp.querySelectorAll("[data-active]").forEach(el => {
+                    el.removeAttribute("data-active");
+                });
+
+                article.setAttribute("data-active", true);
+                bg.setAttribute('data-active', true);
+            });
+        });
+
+    </script>
+</body>
+
+</html>
